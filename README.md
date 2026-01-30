@@ -25,6 +25,39 @@ Before you begin, you need to install the following tools:
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 
+## 🐳 Docker Setup (Alternative)
+
+You can run the entire application using Docker without installing Node.js or Yarn locally.
+
+### Quick Start
+
+```sh
+# Start both Hardhat and Next.js containers
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop containers
+docker-compose down
+```
+
+### Services
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| **Hardhat** | http://localhost:8545 | Local Ethereum blockchain with auto-deployed contracts |
+| **Next.js** | http://localhost:3000 | Frontend development server with hot reload |
+
+### Environment Variables (Optional)
+
+Create a `.env` file in the project root to configure:
+
+```env
+NEXT_PUBLIC_ALCHEMY_API_KEY=your_alchemy_key
+NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=your_walletconnect_id
+```
+
 # 🚩 Challenge: 🎟 Tokenization
 
 ![readme](https://raw.githubusercontent.com/scaffold-eth/se-2-challenges/challenge-tokenization/extension/packages/nextjs/public/hero.png)

@@ -1,0 +1,61 @@
+# =============================================================================
+# Scaffold-ETH 2 Docker Compose
+# Local development environment with Hardhat and Next.js
+# =============================================================================
+
+services:
+  # ---------------------------------------------------------------------------
+  # Hardhat: Local Ethereum blockchain
+  # ---------------------------------------------------------------------------
+  hardhat:
+    build:
+      context: .
+      target: hardhat
+    ports:
+      - "8545:8545"
+    volumes:
+      # Mount contracts for hot reload
+      - ./packages/hardhat/contracts:/app/packages/hardhat/contracts
+      - ./packages/hardhat/deploy:/app/packages/hardhat/deploy
+    environment:
+      - DEPLOYER_PRIVATE_KEY=${DEPLOYER_PRIVATE_KEY:-}
+    networks:
+      - scaffold-eth
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sf -X POST http://localhost:8545 -H 'Content-Type: application/json' -d '{\"jsonrpc\":\"2.0\",\"method\":\"eth_blockNumber\",\"params\":[],\"id\":1}' || exit 1" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 15s
+
+  # ---------------------------------------------------------------------------
+  # Next.js: Frontend application
+  # ---------------------------------------------------------------------------
+  nextjs:
+    build:
+      context: .
+      target: nextjs-dev
+    ports:
+      - "3000:3000"
+    volumes:
+      # Mount app code for hot reload
+      - ./packages/nextjs/app:/app/packages/nextjs/app
+      - ./packages/nextjs/components:/app/packages/nextjs/components
+      - ./packages/nextjs/hooks:/app/packages/nextjs/hooks
+      - ./packages/nextjs/utils:/app/packages/nextjs/utils
+      - ./packages/nextjs/styles:/app/packages/nextjs/styles
+      - ./packages/nextjs/public:/app/packages/nextjs/public
+      # Sync contract ABIs from hardhat
+      - ./packages/nextjs/contracts:/app/packages/nextjs/contracts
+    environment:
+      - NEXT_PUBLIC_ALCHEMY_API_KEY=${NEXT_PUBLIC_ALCHEMY_API_KEY:-}
+      - NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID=${NEXT_PUBLIC_WALLET_CONNECT_PROJECT_ID:-}
+    depends_on:
+      hardhat:
+        condition: service_healthy
+    networks:
+      - scaffold-eth
+
+networks:
+  scaffold-eth:
+    driver: bridge
