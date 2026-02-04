@@ -11,7 +11,7 @@
 
 **A full-stack decentralized application for minting, managing, and transferring ERC-721 NFTs on the Ethereum blockchain.**
 
-[Live Demo](https://challenge-tokenization.vercel.app) • [Smart Contract](https://sepolia.etherscan.io/address/YOUR_CONTRACT_ADDRESS)
+[Live Demo](https://nextjs-three-theta-w8mxv81dx3.vercel.app/) • [Smart Contract](https://sepolia.etherscan.io/address/0x370E74faEcf922fAdF5B873996dD89F788440054)
 
 </div>
 
